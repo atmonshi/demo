@@ -221,26 +221,31 @@ class OrderResource extends Resource
                     ->relationship()
                     ->schema([
                         Forms\Components\TextInput::make('shop_product_id')
-                            ->label('current product id')
+                            ->label(function(Get $get){
+                                return 'I am product ID '.$get('shop_product_id');
+                            })
                             ->columnSpan(4),
                         Actions::make([
                             Actions\Action::make('more-options')
-                                ->label('show product id')
+                                ->label(function(Get $get){
+                                    return 'show btn '.$get('../shop_product_id');
+                                })
+                                //->label('show product id')
                                 ->fillForm(function (Get $get): array {
                                     return [
                                         // tested this too for some reason
                                         //'shop_product_id' => $get('shop_product_id',true),
-                                        'shop_product_id' => $get('shop_product_id'),
+                                        'shop_product_id' => $get('../shop_product_id'),
                                     ];
                                 })
 
                                 ->form([
-                                    TextInput::make('shop_product_id')
+                                    TextInput::make('../shop_product_id')
                                 ])
                                 ->action(function () {
                                     //...
                                 }),
-                        ])
+                        ])->statePath('data')
                             ->columnSpan(4),
 
                         Forms\Components\Select::make('shop_product_id')
