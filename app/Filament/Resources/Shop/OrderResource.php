@@ -220,15 +220,20 @@ class OrderResource extends Resource
                 Forms\Components\Repeater::make('items')
                     ->relationship()
                     ->schema([
-
+                        Forms\Components\TextInput::make('shop_product_id')
+                            ->label('current product id')
+                            ->columnSpan(4),
                         Actions::make([
                             Actions\Action::make('more-options')
                                 ->label('show product id')
-                                ->fillForm(function ($record, Get $get): array {
+                                ->fillForm(function (Get $get): array {
                                     return [
+                                        // tested this too for some reason
+                                        //'shop_product_id' => $get('shop_product_id',true),
                                         'shop_product_id' => $get('shop_product_id'),
                                     ];
                                 })
+
                                 ->form([
                                     TextInput::make('shop_product_id')
                                 ])
@@ -236,9 +241,6 @@ class OrderResource extends Resource
                                     //...
                                 }),
                         ])
-                            ->columnSpan(4),
-                        Forms\Components\TextInput::make('shop_product_id')
-                            ->label('current product id')
                             ->columnSpan(4),
 
                         Forms\Components\Select::make('shop_product_id')
