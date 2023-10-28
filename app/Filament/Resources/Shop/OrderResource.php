@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Carbon;
 use Squire\Models\Currency;
+use Filament\Forms\Components\Actions\Action;
 
 class OrderResource extends Resource
 {
@@ -219,6 +220,7 @@ class OrderResource extends Resource
             return [
                 Forms\Components\Repeater::make('items')
                     ->relationship()
+                    ->live()
                     ->schema([
                         Forms\Components\TextInput::make('shop_product_id')
                             ->label(function(Get $get){
@@ -228,24 +230,18 @@ class OrderResource extends Resource
                         Actions::make([
                             Actions\Action::make('more-options')
                                 ->label(function(Get $get){
-                                    return 'show btn '.$get('../shop_product_id');
+                                    return 'show btn '.$get('shop_product_id');
                                 })
-                                //->label('show product id')
                                 ->fillForm(function (Get $get): array {
                                     return [
-                                        // tested this too for some reason
-                                        //'shop_product_id' => $get('shop_product_id',true),
-                                        'shop_product_id' => $get('../shop_product_id'),
+                                        'shop_product_id' => $get('shop_product_id'),
                                     ];
                                 })
 
                                 ->form([
-                                    TextInput::make('../shop_product_id')
-                                ])
-                                ->action(function () {
-                                    //...
-                                }),
-                        ])->statePath('data')
+                                    TextInput::make('shop_product_id')
+                                ]),
+                        ])
                             ->columnSpan(4),
 
                         Forms\Components\Select::make('shop_product_id')
