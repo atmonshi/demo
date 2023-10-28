@@ -10,7 +10,10 @@ use App\Forms\Components\AddressForm;
 use App\Models\Shop\Order;
 use App\Models\Shop\Product;
 use Filament\Forms;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -217,6 +220,27 @@ class OrderResource extends Resource
                 Forms\Components\Repeater::make('items')
                     ->relationship()
                     ->schema([
+
+                        Actions::make([
+                            Actions\Action::make('more-options')
+                                ->label('show product id')
+                                ->fillForm(function ($record, Get $get): array {
+                                    return [
+                                        'shop_product_id' => $get('shop_product_id'),
+                                    ];
+                                })
+                                ->form([
+                                    TextInput::make('shop_product_id')
+                                ])
+                                ->action(function () {
+                                    //...
+                                }),
+                        ])
+                            ->columnSpan(4),
+                        Forms\Components\TextInput::make('shop_product_id')
+                            ->label('current product id')
+                            ->columnSpan(4),
+
                         Forms\Components\Select::make('shop_product_id')
                             ->label('Product')
                             ->options(Product::query()->pluck('name', 'id'))
